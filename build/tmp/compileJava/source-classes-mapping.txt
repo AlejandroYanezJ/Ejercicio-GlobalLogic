@@ -1,0 +1,18 @@
+globallogic/ejercicio/service/UserService.java
+ globallogic.ejercicio.service.UserService
+globallogic/ejercicio/EjercicioApplication.java
+ globallogic.ejercicio.EjercicioApplication
+globallogic/ejercicio/dto/PhoneDTO.java
+ globallogic.ejercicio.dto.PhoneDTO
+globallogic/ejercicio/controller/UserController.java
+ globallogic.ejercicio.controller.UserController
+globallogic/ejercicio/dto/UserDTO.java
+ globallogic.ejercicio.dto.UserDTO
+globallogic/ejercicio/dto/UserResponseDTO.java
+ globallogic.ejercicio.dto.UserResponseDTO
+globallogic/ejercicio/entity/UserEntity.java
+ globallogic.ejercicio.entity.UserEntity
+globallogic/ejercicio/repository/UsersRepository.java
+ globallogic.ejercicio.repository.UsersRepository
+globallogic/ejercicio/service/impl/UserServiceImpl.java
+ globallogic.ejercicio.service.impl.UserServiceImpl
