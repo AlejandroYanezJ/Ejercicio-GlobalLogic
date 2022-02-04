@@ -1,13 +1,10 @@
 package globallogic.ejercicio.entity;
 
-import globallogic.ejercicio.dto.PhoneDTO;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Data
@@ -15,7 +12,7 @@ import java.util.ArrayList;
 @AllArgsConstructor
 @ToString
 @Table(name = "USERS")
-public class UserEntity {
+public class UserEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,12 +20,19 @@ public class UserEntity {
 
     private String name;
 
-    @Id
-    @Column(name="EMAIL")
     private String email;
 
     private String password;
 
     private String phones;
+
+    private String created;
+
+    private String lastLogin;
+
+    private String token;
+
+    private Boolean isActive;
+
 
 }

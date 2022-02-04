@@ -14,6 +14,7 @@ import javax.validation.Valid;
 
 @RestController
 @NoArgsConstructor
+
 public class UserController {
 
     @Autowired
@@ -21,7 +22,7 @@ public class UserController {
 
 
    @PutMapping(value = "/sign-up", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<UserResponseDTO> userSignUp(@RequestBody UserDTO request){
+    public ResponseEntity<UserResponseDTO> userSignUp(@Valid @RequestBody UserDTO request){
        return ResponseEntity.ok(userService.registerUser(request));
    }
 
