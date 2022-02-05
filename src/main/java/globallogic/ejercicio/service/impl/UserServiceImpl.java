@@ -1,10 +1,11 @@
 package globallogic.ejercicio.service.impl;
 
+import globallogic.ejercicio.Utils.Utils;
 import globallogic.ejercicio.dto.*;
 import globallogic.ejercicio.entity.PhoneEntity;
 import globallogic.ejercicio.entity.UserEntity;
 import globallogic.ejercicio.exception.TokenValidationException;
-import globallogic.ejercicio.exception.UserRegisterException;
+import globallogic.ejercicio.exception.UserException;
 import globallogic.ejercicio.repository.PhoneRespository;
 import globallogic.ejercicio.repository.UsersRepository;
 import globallogic.ejercicio.service.TokenService;
@@ -14,13 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.net.URI;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 @Log4j2
@@ -55,14 +53,15 @@ public class UserServiceImpl implements UserService {
             return response;
         }
         else{
-            throw new UserRegisterException(409,"Usuario ya registrado previamente");
+            throw new UserException(409,"Usuario ya registrado previamente");
         }
     }
 
     public UserEntity getDataGenerateUser(UserSignUpRequestDTO user){
 
-        String dateString = getActualDate();
+        String dateString = Utils.getActualDate();
         return new UserEntity(null,
+                UUID.randomUUID().toString(),
                 user.getName(),
                 user.getEmail(),
                 encryptPassword(user.getPassword()),
@@ -107,19 +106,28 @@ public class UserServiceImpl implements UserService {
         return encoder.encode(password);
     }
 
-    public UserLoginResponseDTO loginUser(UserLoginRequestDTO user,String token) throws UserRegisterException, TokenValidationException {
+    public Boolean validatePassword(String dbPassword,String password ){
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if (!encoder.matches(password,dbPassword)){
+            return false;
+        }
+        return true;
+    }
 
-        UserEntity entity = usersRepository.findByToken(token);
+    public UserLoginResponseDTO loginUser(UserLoginRequestDTO user,String token) throws UserException, TokenValidationException {
+        UserEntity entity = usersRepository.findByEmail(user.getEmail());
 
-        if (!Objects.nonNull(entity)) {
-            throw new UserRegisterException(404, "Usuario no encontrado");
+        if (!Objects.nonNull(entity) || !validatePassword(entity.getPassword(),user.getPassword()) ){
+            throw new UserException(401,"Email y/o contraseña incorrectos");
+        }
+        if(!tokenService.validateToken(entity.getEmail(), entity.getLastLogin(), token, entity.getToken())){
+            throw new TokenValidationException(401,"El token ingresado no es valido");
         }
         if (!entity.getIsActive()) {
-            throw new UserRegisterException(409, "Usuario no se encuentra activo");
+            throw new UserException(409, "Usuario no se encuentra activo");
         }
-        //Validacion por token
-        tokenService.validateToken(entity.getEmail(), entity.getLastLogin(), entity.getToken());
-        String date = getActualDate();
+
+        String date = Utils.getActualDate();
         UserEntity entityUpdate = getDataUpdateUser(entity);
         UserEntity result = usersRepository.save(entityUpdate);
         //UserEntity result = usersRepository.updateUser(entityUpdate.getEmail(),entityUpdate.getLastLogin(),entityUpdate.getToken());
@@ -127,8 +135,7 @@ public class UserServiceImpl implements UserService {
         List<PhoneEntity> phoneResult = phoneRespository.findByUserId(entity.getId());
         List<PhoneDTO> phones = getPhonesFromEntity(phoneResult);
 
-
-        return new UserLoginResponseDTO(entityUpdate.getId(),
+        return new UserLoginResponseDTO(entityUpdate.getUuid(),
                 entityUpdate.getCreated(),
                 entityUpdate.getLastLogin(),
                 entityUpdate.getToken(),
@@ -141,11 +148,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity getDataUpdateUser(UserEntity entity) {
-        String dateString = getActualDate();
+        String dateString = Utils.getActualDate();
         return new UserEntity(entity.getId(),
+                entity.getUuid(),
                 entity.getName(),
                 entity.getEmail(),
-                encryptPassword(entity.getPassword()),
+                entity.getPassword(),
                 entity.getCreated(),
                 dateString,
                 tokenService.generateToken(entity.getEmail(),
@@ -153,9 +161,5 @@ public class UserServiceImpl implements UserService {
                 true);
     }
 
-    public String getActualDate(){
-        LocalDateTime date = LocalDateTime.now();
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        return dtf.format(date);
-    }
+
 }

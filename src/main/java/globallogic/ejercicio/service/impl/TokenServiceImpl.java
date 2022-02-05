@@ -30,14 +30,13 @@ public class TokenServiceImpl implements TokenService {
         return tokenJWTString;
     }
 
-    public void validateToken(String email, String date, String token) throws TokenValidationException {
+    public Boolean validateToken(String email, String date, String token, String entityToken) {
         String validationToken = generateToken(email,date);
-        if (validationToken.equals(token)){
-            log.info("Token Validado");
+        if (!token.equals("Bearer "+validationToken)  || !entityToken.equals(validationToken)){
+            return false;
         }
-        else{
-            throw new TokenValidationException(401,"El token ingresado no es valido");
-        }
+        return true;
+
     }
 
 }

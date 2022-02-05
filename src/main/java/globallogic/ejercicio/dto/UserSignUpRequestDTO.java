@@ -18,22 +18,15 @@ import java.util.ArrayList;
 public class UserSignUpRequestDTO {
 
 private String name;
-    @NotEmpty(message = "El email no puede ser vacio")
+    @NotEmpty(message = "El email no puede ser vacio") 
     @NotBlank(message = "El email no puede estar en blanco")
-    @Pattern(regexp="^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&’*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$",message="El formato de email es incorrecto. Ej: nombre@dominio.com")
+    @Pattern(regexp="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$",message="El formato de email es incorrecto. Ej: nombre@dominio.com")
     private String email;
 
     @NotEmpty( message = "La contrasena no puede ser vacia")
     @NotBlank(message = "La contrasena no puede estar en blanco")
-    //Debe tener solo una Mayúscula y solamente dos números (no necesariamente
-    //consecutivos), en combinación de letras minúsculas, largo máximo de 12 y mínimo 8.
-    //@Pattern(regexp="^(.* ?=.[0-9]{2,2}) ( ?=.[A-Z]{1,1}) (?=.[a-z]{5,} ).*$",message="La contraseña debe contener solo una letra mayuscula y 2 numeros. Ej: a2asfGfdfdf4")
+    @Pattern(regexp="^(?=^[^A-Z]*[A-Z][^A-Z]*$)(?=^.{8,12}$)((?:\\D*\\d){2}\\D*)$",message="La contraseña debe ser de largo entre 8 y 12 caracteres y contener solo una letra mayuscula y 2 numeros . Ej: a2asfGfdfdf4")
     @Size(min =8 ,max =12 ,message = "El largo de la contraseña debe ser entre 8 y 12 caracteres")
-    //Largo maximo 12 y minimo 8
     private String password;
-
     private ArrayList<PhoneDTO> phones;
-
-
-
 }

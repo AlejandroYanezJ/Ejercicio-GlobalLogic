@@ -9,7 +9,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class UserRegisterException extends Exception{
+public class UserException extends Exception{
     int code;
     String message;
 }

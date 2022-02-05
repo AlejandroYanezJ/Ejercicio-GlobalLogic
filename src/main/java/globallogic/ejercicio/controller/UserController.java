@@ -5,7 +5,7 @@ import globallogic.ejercicio.dto.UserLoginResponseDTO;
 import globallogic.ejercicio.dto.UserSignUpRequestDTO;
 import globallogic.ejercicio.dto.UserSignUpResponseDTO;
 import globallogic.ejercicio.exception.TokenValidationException;
-import globallogic.ejercicio.exception.UserRegisterException;
+import globallogic.ejercicio.exception.UserException;
 import globallogic.ejercicio.service.UserService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class UserController {
    }
 
    @GetMapping(value = "/login", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<UserLoginResponseDTO> userLogin(@RequestHeader(value = "Authorization") String token, @RequestBody UserLoginRequestDTO request) throws UserRegisterException, TokenValidationException {
+    public ResponseEntity<UserLoginResponseDTO> userLogin(@RequestHeader(value = "Authorization") String token, @Valid @RequestBody UserLoginRequestDTO request) throws UserException, TokenValidationException {
 
        return new ResponseEntity<>(userService.loginUser(request,token),null,HttpStatus.OK);
    }

@@ -13,7 +13,7 @@ import java.util.List;
 @ToString
 public class UserLoginResponseDTO {
 
-    Long id;
+    String id;
     String created;
     String lastLogin;
     String token;

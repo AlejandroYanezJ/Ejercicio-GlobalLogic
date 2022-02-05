@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ControllerAdvice
-public class GlobalException {
+public class GlobalHandlerException {
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
@@ -36,7 +36,7 @@ public class GlobalException {
 
     @ExceptionHandler(BindException.class)
     @ResponseBody
-    public ResponseEntity<Object> handleException(MethodArgumentNotValidException e){
+    public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
         List<FieldError> errorsArray = e.getBindingResult().getFieldErrors();
         List<Error> errors = new ArrayList<>();
         for (FieldError error: errorsArray){
@@ -52,9 +52,9 @@ public class GlobalException {
         return new ResponseEntity<>(response,null,HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(UserRegisterException.class)
+    @ExceptionHandler(UserException.class)
     @ResponseBody
-    public ResponseEntity<Object> handleException(UserRegisterException e){
+    public ResponseEntity<Object> handleUserException(UserException e){
         ErrorDTO response = new ErrorDTO();
         List<Error> errors = new ArrayList<>();
         Error error = new Error();
@@ -66,7 +66,10 @@ public class GlobalException {
         response.setError(errors);
         HttpStatus status = null;
 
-        if (e.getCode()==404){
+        if (e.getCode()==401){
+            status=HttpStatus.UNAUTHORIZED;
+        }
+        else if (e.getCode()==404){
             status=HttpStatus.NOT_FOUND;
         }
         else if (e.getCode()==409){
@@ -80,7 +83,7 @@ public class GlobalException {
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     @ResponseBody
-    public ResponseEntity<Object> handleException(HttpMediaTypeNotSupportedException e){
+    public ResponseEntity<Object> handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e){
         ErrorDTO response = new ErrorDTO();
         List<Error> errors = new ArrayList<>();
         Error error = new Error();
@@ -95,13 +98,28 @@ public class GlobalException {
 
     @ExceptionHandler(TokenValidationException.class)
     @ResponseBody
-    public ResponseEntity<Object> handleException(TokenValidationException e){
+    public ResponseEntity<Object> handleTokenValidationException(TokenValidationException e){
         ErrorDTO response = new ErrorDTO();
         List<Error> errors = new ArrayList<>();
         Error error = new Error();
         Timestamp timeStamp = new Timestamp(System.currentTimeMillis());
         error.setTimestamp(timeStamp);
         error.setCodigo(e.getCode());
+        error.setDetail(e.getMessage());
+        errors.add(error);
+        response.setError(errors);
+        return new ResponseEntity<>(response,null,HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    @ResponseBody
+    public ResponseEntity<Object> handleNoHandlerFoundException (NoHandlerFoundException e){
+        ErrorDTO response = new ErrorDTO();
+        List<Error> errors = new ArrayList<>();
+        Error error = new Error();
+        Timestamp timeStamp = new Timestamp(System.currentTimeMillis());
+        error.setTimestamp(timeStamp);
+        error.setCodigo(404);
         error.setDetail(e.getMessage());
         errors.add(error);
         response.setError(errors);
