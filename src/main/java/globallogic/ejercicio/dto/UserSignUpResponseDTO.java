@@ -5,13 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.Date;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class UserResponseDTO {
+public class UserSignUpResponseDTO {
 
      /*
     id: id del usuario (puede ser lo que se genera por el banco de datos, pero sería
@@ -23,9 +21,9 @@ más deseable un UUID)
 
      */
 
-    private UserDTO usuario;
-    private Date created;
-    private Date lastLogin;
+    private UserSignUpRequestDTO user;
+    private String created;
+    private String lastLogin;
     private String token;
     private Boolean isActive;
 

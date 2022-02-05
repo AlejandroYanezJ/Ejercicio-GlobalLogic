@@ -1,4 +1,4 @@
-package globallogic.ejercicio.domain;
+package globallogic.ejercicio.exception;
 
 
 import lombok.AllArgsConstructor;

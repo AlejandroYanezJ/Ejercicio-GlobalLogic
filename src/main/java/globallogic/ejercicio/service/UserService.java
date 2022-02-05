@@ -1,16 +1,23 @@
 package globallogic.ejercicio.service;
 
-import globallogic.ejercicio.dto.PhoneDTO;
-import globallogic.ejercicio.dto.UserDTO;
-import globallogic.ejercicio.dto.UserResponseDTO;
+import globallogic.ejercicio.dto.*;
+import globallogic.ejercicio.entity.PhoneEntity;
+import globallogic.ejercicio.entity.UserEntity;
+import globallogic.ejercicio.exception.TokenValidationException;
+import globallogic.ejercicio.exception.UserRegisterException;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public interface UserService {
 
-    public UserResponseDTO registerUser(UserDTO user);
-    public String getPhonesFromArray(ArrayList<PhoneDTO> phones);
+    public UserSignUpResponseDTO registerUser(UserSignUpRequestDTO user) throws Exception;
+    public List<PhoneEntity> getPhonesEntityFromArray(ArrayList<PhoneDTO> phones, Long userId);
+    public UserEntity getDataGenerateUser(UserSignUpRequestDTO user);
     public String encryptPassword(String password);
+    public UserLoginResponseDTO loginUser(UserLoginRequestDTO user, String token) throws UserRegisterException, TokenValidationException;
+    public UserEntity getDataUpdateUser(UserEntity entity) ;
 
     }

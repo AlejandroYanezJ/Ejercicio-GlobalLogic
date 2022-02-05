@@ -1,6 +1,5 @@
 package globallogic.ejercicio.dto;
 
-import globallogic.ejercicio.exception.Error;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +11,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ErrorDTO {
-    List<Error> error;
+public class UserLoginResponseDTO {
 
+    Long id;
+    String created;
+    String lastLogin;
+    String token;
+    Boolean isActive;
+    String name;
+    String email;
+    String password;
+    List<PhoneDTO> phones;
 }

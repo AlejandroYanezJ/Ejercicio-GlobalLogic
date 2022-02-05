@@ -1,14 +1,17 @@
 package globallogic.ejercicio.controller;
 
-import globallogic.ejercicio.dto.UserDTO;
-import globallogic.ejercicio.dto.UserResponseDTO;
+import globallogic.ejercicio.dto.UserLoginRequestDTO;
+import globallogic.ejercicio.dto.UserLoginResponseDTO;
+import globallogic.ejercicio.dto.UserSignUpRequestDTO;
+import globallogic.ejercicio.dto.UserSignUpResponseDTO;
+import globallogic.ejercicio.exception.TokenValidationException;
+import globallogic.ejercicio.exception.UserRegisterException;
 import globallogic.ejercicio.service.UserService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -20,10 +23,15 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
    @PutMapping(value = "/sign-up", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<UserResponseDTO> userSignUp(@Valid @RequestBody UserDTO request){
-       return ResponseEntity.ok(userService.registerUser(request));
+    public ResponseEntity<UserSignUpResponseDTO> userSignUp(@Valid @RequestBody UserSignUpRequestDTO request) throws Exception {
+       return new ResponseEntity<>(userService.registerUser(request),null, HttpStatus.CREATED);
+   }
+
+   @GetMapping(value = "/login", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<UserLoginResponseDTO> userLogin(@RequestHeader(value = "Authorization") String token, @RequestBody UserLoginRequestDTO request) throws UserRegisterException, TokenValidationException {
+
+       return new ResponseEntity<>(userService.loginUser(request,token),null,HttpStatus.OK);
    }
 
 }

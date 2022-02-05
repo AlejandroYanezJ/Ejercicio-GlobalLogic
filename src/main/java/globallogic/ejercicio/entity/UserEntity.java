@@ -3,8 +3,8 @@ package globallogic.ejercicio.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.io.Serializable;
-import java.util.Date;
 
 @Entity
 @Data
@@ -12,27 +12,18 @@ import java.util.Date;
 @AllArgsConstructor
 @ToString
 @Table(name = "USERS")
+@Transactional
 public class UserEntity implements Serializable {
 
     @Id
+    @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String name;
-
     private String email;
-
     private String password;
-
-    private String phones;
-
     private String created;
-
     private String lastLogin;
-
     private String token;
-
     private Boolean isActive;
-
-
 }
