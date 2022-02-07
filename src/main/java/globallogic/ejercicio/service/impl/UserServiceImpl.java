@@ -10,6 +10,7 @@ import globallogic.ejercicio.repository.PhoneRespository;
 import globallogic.ejercicio.repository.UsersRepository;
 import globallogic.ejercicio.service.TokenService;
 import globallogic.ejercicio.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,10 +27,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UsersRepository usersRepository;
-
     @Autowired
     PhoneRespository phoneRespository;
-
     @Autowired
     TokenService tokenService;
 
@@ -48,12 +47,13 @@ public class UserServiceImpl implements UserService {
                     entity.getCreated(),
                     entity.getLastLogin(),
                     entity.getToken(),
-                    entity.getIsActive());
+                    entity.getIsActive(),
+                    entity.getUuid());
 
             return response;
         }
         else{
-            throw new UserException(409,"Usuario ya registrado previamente");
+            throw new UserException(409,"Usuario ya se encuentra registrado");
         }
     }
 
