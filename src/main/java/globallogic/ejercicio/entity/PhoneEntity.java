@@ -1,16 +1,14 @@
 package globallogic.ejercicio.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -39,7 +37,8 @@ public class PhoneEntity implements Serializable {
     @Column(name="USER_ID")
     private Long userId;
 
-    @Data
+    @Getter
+    @Setter
     public static class IdClass implements Serializable {
         private Long id;
         private Long userId;

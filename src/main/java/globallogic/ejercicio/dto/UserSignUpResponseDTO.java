@@ -1,16 +1,13 @@
 package globallogic.ejercicio.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 public class UserSignUpResponseDTO {
-
 
     private UserSignUpRequestDTO user;
     private String created;
@@ -18,7 +15,5 @@ public class UserSignUpResponseDTO {
     private String token;
     private Boolean isActive;
     private String id;
-
-
 
 }
