@@ -10,7 +10,6 @@ import globallogic.ejercicio.repository.PhoneRespository;
 import globallogic.ejercicio.repository.UsersRepository;
 import globallogic.ejercicio.service.TokenService;
 import globallogic.ejercicio.service.UserService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -42,7 +41,6 @@ public class UserServiceImpl implements UserService {
             phones.stream().forEach(phoneEntity -> {
                 phoneRespository.save(phoneEntity);
             });
-            log.info("usuario registrado en la db");
             UserSignUpResponseDTO response = new UserSignUpResponseDTO(user,
                     entity.getCreated(),
                     entity.getLastLogin(),
@@ -130,8 +128,6 @@ public class UserServiceImpl implements UserService {
         String date = Utils.getActualDate();
         UserEntity entityUpdate = getDataUpdateUser(entity);
         UserEntity result = usersRepository.save(entityUpdate);
-        //UserEntity result = usersRepository.updateUser(entityUpdate.getEmail(),entityUpdate.getLastLogin(),entityUpdate.getToken());
-        log.info("usuario actualizado");
         List<PhoneEntity> phoneResult = phoneRespository.findByUserId(entity.getId());
         List<PhoneDTO> phones = getPhonesFromEntity(phoneResult);
 

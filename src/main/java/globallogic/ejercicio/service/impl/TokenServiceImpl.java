@@ -26,7 +26,6 @@ public class TokenServiceImpl implements TokenService {
                 .setSubject(email)
                 .signWith(SignatureAlgorithm.HS256,TOKEN_KEY.getBytes());
         String tokenJWTString = tokenJWT.compact();
-        System.out.println(tokenJWTString);
         return tokenJWTString;
     }
 
